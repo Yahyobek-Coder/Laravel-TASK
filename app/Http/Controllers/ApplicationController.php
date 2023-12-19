@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmailJob;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
 use App\Models\Application;
+use App\Models\User;
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class ApplicationController extends Controller
 {
+
     public function store(Request $request)
     {
         if($request->hasFile('file')){
@@ -30,6 +37,8 @@ class ApplicationController extends Controller
             'message' => $request->message,
             'file_url' => $path ?? null,
         ]);
+
+        dispatch(new SendEmailJob($application));
 
         return redirect()->back();
     }

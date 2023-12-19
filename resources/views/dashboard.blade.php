@@ -50,6 +50,8 @@
                                 </div>
                                 
                             @endforeach
+
+                            {{ $applications->links() }}
                         </div>
                     @elseif(auth()->user()->role->name == 'client')
                         You're Client
