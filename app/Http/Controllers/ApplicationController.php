@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendEmailJob;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
+use App\Mail\ApplicationCreated;
 use App\Models\Application;
 use App\Models\User;
-use Illuminate\Bus\Queueable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Carbon\Carbon;
 
 class ApplicationController extends Controller
 {
-
     public function store(Request $request)
     {
-        if($request->hasFile('file')){
+        if($this->checkDate()){
+            return redirect()->back()->with('error', 'You can only submit one application per day.');
+        }
+
+        if ($request->hasFile('file')) {
             $name = $request->file('file')->getClientOriginalName();
             $path = $request->file('file')->storeAs(
                 'files',
@@ -38,8 +39,22 @@ class ApplicationController extends Controller
             'file_url' => $path ?? null,
         ]);
 
-        dispatch(new SendEmailJob($application));
+        SendEmailJob::dispatch($application);
 
         return redirect()->back();
+    }
+
+    protected function checkDate()
+    {
+        if(auth()->user()->applications()->latest()->first() == null){
+            return false;
+        }
+        $last_application = auth()->user()->applications()->latest()->first();
+        $last_app_date = $last_application ? Carbon::parse($last_application->created_at)->format('Y-m-d') : null;
+        $today = Carbon::now()->format('Y-m-d');
+
+        if ($last_app_date && $last_app_date == $today) {
+            return true;
+        }
     }
 }
