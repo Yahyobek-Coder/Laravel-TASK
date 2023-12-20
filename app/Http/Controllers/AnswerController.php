@@ -11,12 +11,12 @@ class AnswerController extends Controller
 {
     public function __construct()
     {
-        
+        // ...
     }
 
     public function create(Application $application)
     {
-        if (! Gate::allows('update-post', auth()->user())) {
+        if (!Gate::allows('answer-application')) {
             abort(403);
         }
 
@@ -25,13 +25,9 @@ class AnswerController extends Controller
 
     public function store(Application $application, Request $request)
     {
-        if (! Gate::allows('update-post', auth()->user())) {
-            abort(403);
-        }
-
         $request->validate(['body' => 'required']);
 
-        $application->answer()->create([
+        $application->answers()->create([
             'body' => $request->body,
         ]);
 

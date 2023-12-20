@@ -60,7 +60,7 @@
                                     <div>
                                         <hr class="border">
                                         <h3 class="text-xs font-bold mt-2 text-indigo-600">Answer:</h3>
-                                        <p>{{ $application->answer->body }}</p>
+                                        <p>{{ ($application->answers->first())->body }}</p>
                                     </div>
                                 @else
                                     @if(auth()->user()->role->name == 'manager')

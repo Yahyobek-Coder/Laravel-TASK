@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use PharIo\Manifest\ApplicationName;
 use App\Models\Application;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
@@ -16,9 +15,8 @@ class MainController extends Controller
 
     public function dashboard()
     {
-
         return view('dashboard')->with([
-            'applications' => Application::latest()->paginate(10),
+            'applications' => Application::latest()->paginate(4),
         ]);
     }
-}
+}                                          
