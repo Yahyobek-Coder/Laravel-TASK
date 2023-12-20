@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
@@ -24,7 +25,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('application', ApplicationController::class);
 });
 
-
+Route::get('application/{application}/answer', [AnswerController::class, 'create'])->name('answers.create');
+Route::post('application/{application}/answer', [AnswerController::class, 'store'])->name('answers.store');
 
 
 Route::middleware('auth')->group(function () {

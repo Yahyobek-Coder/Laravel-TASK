@@ -36,6 +36,6 @@ class User extends Authenticatable
     
     public function applications()
     {
-        return $this->hasmany(Application::class);
+        return $this->hasMany(Application::class);
     }
 }
