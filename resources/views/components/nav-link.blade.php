@@ -9,3 +9,7 @@ $classes = ($active ?? false)
 <a {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
 </a>
+
+<a class="inline-flex items-center px-1 pt-1 border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out" href="{{ route('application.index') }}" :class="{ 'active': request()->routeIs('dashboard') }">
+    {{ __('Applications') }}
+</a>

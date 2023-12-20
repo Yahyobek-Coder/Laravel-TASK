@@ -2,22 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Application;
 use App\Models\Answer;
+use App\Models\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AnswerController extends Controller
 {
+    public function __construct()
+    {
+        
+    }
+
     public function create(Application $application)
     {
+        if (! Gate::allows('update-post', auth()->user())) {
+            abort(403);
+        }
+
         return view('answers.create', ['application' => $application]);
     }
 
     public function store(Application $application, Request $request)
     {
+        if (! Gate::allows('update-post', auth()->user())) {
+            abort(403);
+        }
+
         $request->validate(['body' => 'required']);
 
-        $application->answers()->create([
+        $application->answer()->create([
             'body' => $request->body,
         ]);
 
